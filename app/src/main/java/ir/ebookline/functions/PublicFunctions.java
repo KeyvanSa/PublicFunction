@@ -67,6 +67,7 @@ public class PublicFunctions {
         shareIntent.setType("text/plain");
         shareIntent.putExtra(Intent.EXTRA_TEXT, text );
         shareIntent.putExtra(Intent.EXTRA_SUBJECT , "ShareText" );
+        con.startActivity(shareIntent);
     }
 
     @SuppressLint("MissingPermission")
