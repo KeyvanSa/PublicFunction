@@ -10,10 +10,13 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.GradientDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Toast;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
 public class PublicFunctions {
@@ -43,6 +46,7 @@ public class PublicFunctions {
 
             }
         });
+        alertDialog.create().show();
     }
 
     public void textToClipBoard (String text)
@@ -88,7 +92,7 @@ public class PublicFunctions {
     }
 
 
-    public int screenSize ( int i )
+    public int screenSize (int i)
     {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity)con).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -110,7 +114,6 @@ public class PublicFunctions {
         v.setBackgroundDrawable(shape);
     }
 
-
     public String getRandomString(int stringLength)
     {
         String ALLOWED_CHARACTERS ="0123456789qwertyuiopasdfghjklzxcvbnm";
@@ -121,51 +124,28 @@ public class PublicFunctions {
         return sb.toString();
     }
 
-    public long getCurrentTimeMillis()
+
+    public String base64Decode(String text)
     {
-        return java.lang.System.currentTimeMillis();
-    }
-
-
-    public String getDisplayableTime(long delta) {
-        long difference = 0;
-        long mDate = getCurrentTimeMillis();
-        if (mDate > delta) {
-            difference = mDate - delta;
-            final long seconds = difference / 1000;
-            final long minutes = seconds / 60;
-            final long hours = minutes / 60;
-            final long days = hours / 24;
-            final long months = days / 31;
-            final long years = days / 365;
-
-            if (seconds < 60) {
-                return "a few seconds ago";
-            } else if (seconds < 120) {
-                return "a minute ago";
-            } else if (seconds < 2700) // 45 * 60
-            {
-                return minutes + " minutes ago";
-            } else if (seconds < 5400) // 90 * 60
-            {
-                return "an hour ago";
-            } else if (seconds < 86400) // 24 * 60 * 60
-            {
-                return hours + " hours ago";
-            } else if (seconds < 172800) // 48 * 60 * 60
-            {
-                return "yesterday";
-            } else if (seconds < 2592000) // 30 * 24 * 60 * 60
-            {
-                return days + " days ago";
-            } else if (seconds < 31104000) // 12 * 30 * 24 * 60 * 60
-            {
-                return months <= 1 ? "a month ago" : months + " months ago";
-            } else {
-                return years <= 1 ? "a year ago" : years + " years ago";
-            }
+        byte[] data = Base64.decode(text, Base64.DEFAULT);
+        try {
+            String txt = new String(data, StandardCharsets.UTF_8);
+            return txt;
+        } catch (Exception e) {
+            return "Error in :\n "+e.toString();
         }
-        return null;
     }
+
+    public String base64Encode(String text)
+    {
+        try {
+            byte[] data = text.getBytes(StandardCharsets.UTF_8);
+            String base64 = Base64.encodeToString(data, Base64.DEFAULT);
+            return base64;
+        } catch (Exception e) {
+            return "Error In :\n "+e.toString();
+        }
+    }
+
 
 }
